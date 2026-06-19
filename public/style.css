@@ -266,20 +266,27 @@ nav a:hover::after {
 
 /* --- Герой-секция --- */
 .hero {
-  padding: 180px 20px 100px 20px;
+  padding: 160px 20px 80px 20px;
   min-height: 80vh;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
+}
+
+.hero-container {
+  display: grid;
+  grid-template-columns: 1.2fr 1fr;
+  gap: 40px;
+  align-items: center;
+  width: 100%;
 }
 
 .hero-info {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  text-align: left;
 }
 
 .hero-tag {
@@ -308,7 +315,7 @@ nav a:hover::after {
 }
 
 .hero h1 {
-  font-size: 3.5rem;
+  font-size: 3.2rem;
   font-family: var(--font-serif);
   font-weight: 800;
   line-height: 1.15;
@@ -332,6 +339,46 @@ nav a:hover::after {
 .hero-actions {
   display: flex;
   gap: 15px;
+}
+
+.hero-image-card {
+  border-radius: 28px;
+  overflow: hidden;
+  padding: 12px;
+  box-shadow: var(--glass-shadow);
+  display: flex;
+  transition: all 0.4s ease;
+}
+
+.hero-image-card:hover {
+  transform: translateY(-5px) scale(1.01);
+  box-shadow: var(--glass-shadow-hover);
+  border-color: rgba(224, 90, 54, 0.25);
+}
+
+.hero-image {
+  width: 100%;
+  height: auto;
+  border-radius: 20px;
+  object-fit: cover;
+  aspect-ratio: 1.1 / 1;
+}
+
+.header-phone {
+  font-weight: 600;
+  color: var(--text-main);
+  text-decoration: none;
+  font-size: 0.95rem;
+  transition: color 0.3s ease;
+  margin-right: 15px;
+}
+
+.header-phone:hover {
+  color: var(--accent-terracotta);
+}
+
+.mobile-phone-item {
+  display: none;
 }
 
 /* --- Заголовки секций --- */
@@ -557,15 +604,12 @@ nav a:hover::after {
   padding: 20px 0;
 }
 
+
 .gallery-track {
   display: flex;
   gap: 20px;
   width: max-content;
   animation: scrollGallery 45s linear infinite;
-}
-
-.gallery-track:hover {
-  animation-play-state: paused;
 }
 
 @keyframes scrollGallery {
@@ -860,18 +904,36 @@ footer {
   padding: 80px 20px;
   max-width: 1200px;
   margin: 0 auto;
+  overflow: hidden;
 }
 
-.reviews-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+.reviews-carousel {
+  position: relative;
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  display: flex;
+  overflow: hidden;
+  padding: 20px 0;
+}
+
+.reviews-track {
+  display: flex;
   gap: 25px;
+  width: max-content;
+  animation: scrollReviews 55s linear infinite;
 }
 
 .review-card {
+  width: 380px;
+  flex-shrink: 0;
   padding: 30px;
   display: flex;
   flex-direction: column;
+}
+
+@keyframes scrollReviews {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .review-header {
@@ -981,19 +1043,48 @@ footer {
     display: none;
   }
 
+  .hero-container {
+    grid-template-columns: 1fr;
+    gap: 30px;
+    text-align: center;
+  }
+
+  .hero-info {
+    align-items: center;
+    text-align: center;
+  }
+
+  .hero-image-card {
+    order: -1;
+    margin: 0 auto;
+    max-width: 320px;
+  }
+
   .hero h1 {
-    font-size: 2.5rem;
+    font-size: 2.3rem;
   }
 
   .hero p {
-    font-size: 1rem;
+    font-size: 0.95rem;
   }
 
   .hero-actions {
     flex-direction: column;
     width: 100%;
     gap: 10px;
-    padding: 0 20px;
+    padding: 0;
+  }
+
+  .mobile-phone-item {
+    display: block;
+    margin-top: 15px;
+    border-top: 1px solid rgba(224, 90, 54, 0.08);
+    padding-top: 15px;
+  }
+
+  .mobile-phone-link {
+    color: var(--accent-terracotta) !important;
+    font-weight: 700 !important;
   }
 
   .btn-primary, .btn-secondary {
@@ -1064,6 +1155,27 @@ footer {
     opacity: 1;
     background: linear-gradient(to top, rgba(54, 46, 41, 0.8) 0%, rgba(54, 46, 41, 0.1) 100%);
     transform: translateY(0);
+  }
+
+  /* Скролл отзывов пальцем без карусели на мобилке */
+  .reviews-carousel {
+    overflow-x: auto;
+    cursor: grab;
+    width: 100%;
+    margin-left: 0;
+    padding: 10px 15px;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .reviews-track {
+    animation: none;
+    display: flex;
+    gap: 15px;
+  }
+
+  .review-card {
+    width: 290px;
+    flex-shrink: 0;
   }
 
   /* Контакты под картой на мобильной версии */

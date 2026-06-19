@@ -34,7 +34,6 @@ function renderContent(data) {
     const grid = document.getElementById('features-grid');
     grid.innerHTML = data.features.map(f => `
       <div class="glass card feature-card glass-card">
-        <div class="feature-icon">${f.icon}</div>
         <h3>${f.title}</h3>
         <p>${f.description}</p>
       </div>
@@ -128,9 +127,9 @@ function renderContent(data) {
 
   // 6. Отзывы
   if (data.reviews) {
-    const reviewsGrid = document.getElementById('reviews-grid');
-    if (reviewsGrid) {
-      reviewsGrid.innerHTML = data.reviews.map(r => `
+    const reviewsTrack = document.getElementById('reviews-track');
+    if (reviewsTrack) {
+      const reviewsHtml = data.reviews.map(r => `
         <div class="review-card glass glass-card">
           <div class="review-header">
             <div class="review-author">
@@ -142,6 +141,8 @@ function renderContent(data) {
           <p class="review-text">"${r.text}"</p>
         </div>
       `).join('');
+      // Дублируем отзывы для бесконечной карусели
+      reviewsTrack.innerHTML = reviewsHtml + reviewsHtml;
     }
   }
 }

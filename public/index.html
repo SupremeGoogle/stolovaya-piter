@@ -42,24 +42,31 @@
         <li><a href="#reviews" onclick="closeMobileMenu()">Отзывы</a></li>
         <li><a href="#about" onclick="closeMobileMenu()">О нас</a></li>
         <li><a href="#feedback" onclick="closeMobileMenu()">Контакты</a></li>
+        <li class="mobile-phone-item"><a href="tel:+79818727155" class="mobile-phone-link">📞 +7 (981) 872-71-55</a></li>
       </ul>
     </nav>
     <div class="header-contacts">
-      <a href="#feedback" class="btn-primary btn-header">Заказать доставку</a>
+      <a href="tel:+79818727155" class="header-phone">+7 (981) 872-71-55</a>
+      <a href="#feedback" class="btn-primary btn-header">Написать нам</a>
     </div>
   </header>
 
   <!-- Герой-секция -->
   <section id="hero" class="hero">
-    <div class="hero-info">
-      <div class="hero-tag">
-        <span></span> Столовая в Шушарах
+    <div class="hero-container">
+      <div class="hero-info">
+        <div class="hero-tag">
+          <span></span> Столовая «Котлетка с пюрешкой»
+        </div>
+        <h1 id="hero-title">Загрузка...</h1>
+        <p id="hero-subtitle">Загрузка информации...</p>
+        <div class="hero-actions">
+          <a href="#catalog" class="btn-primary">Смотреть меню ➔</a>
+          <a href="#about" class="btn-secondary">Наш адрес и часы</a>
+        </div>
       </div>
-      <h1 id="hero-title">Загрузка...</h1>
-      <p id="hero-subtitle">Загрузка информации...</p>
-      <div class="hero-actions">
-        <a href="#catalog" class="btn-primary">Смотреть меню ➔</a>
-        <a href="#about" class="btn-secondary">Наш адрес и часы</a>
+      <div class="hero-image-card glass">
+        <img src="images/shashlik_pork.jpg" alt="Сочный шашлык" class="hero-image">
       </div>
     </div>
   </section>
@@ -120,8 +127,10 @@
       <p class="section-subtitle">Честные мнения наших посетителей, оставленные в Яндекс.Картах.</p>
     </div>
     
-    <div id="reviews-grid" class="reviews-grid">
-      <!-- Сюда динамически рендерятся отзывы -->
+    <div class="reviews-carousel">
+      <div id="reviews-track" class="reviews-track">
+        <!-- Сюда динамически рендерятся отзывы -->
+      </div>
     </div>
   </section>
 
