@@ -125,6 +125,25 @@ function renderContent(data) {
     // Дублируем слайды, чтобы скролл шел бесконечно и плавно
     track.innerHTML = slidesHtml + slidesHtml;
   }
+
+  // 6. Отзывы
+  if (data.reviews) {
+    const reviewsGrid = document.getElementById('reviews-grid');
+    if (reviewsGrid) {
+      reviewsGrid.innerHTML = data.reviews.map(r => `
+        <div class="review-card glass glass-card">
+          <div class="review-header">
+            <div class="review-author">
+              <h4>${r.name}</h4>
+              <span class="review-rank">${r.rank}</span>
+            </div>
+            <span class="review-date">${r.date}</span>
+          </div>
+          <p class="review-text">"${r.text}"</p>
+        </div>
+      `).join('');
+    }
+  }
 }
 
 // Функция переключения вкладок каталога

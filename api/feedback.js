@@ -48,7 +48,7 @@ export default async function handler(req, res) {
         .replace(/>/g, '&gt;');
     };
 
-    const text = `🍽 <b>Новая заявка с сайта «Столовая Шушары»!</b>\n\n` +
+    const text = `🍽 <b>Новая заявка с сайта «Котлетка с пюрешкой»!</b>\n\n` +
                  `👤 <b>Имя:</b> ${escapeHtml(name)}\n` +
                  `📞 <b>Телефон:</b> <code>${escapeHtml(phone)}</code>\n` +
                  `💬 <b>Сообщение:</b> ${escapeHtml(message || '—')}\n\n` +
