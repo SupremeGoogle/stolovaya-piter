@@ -1,0 +1,15 @@
+{
+  "name": "stolovaya-piter",
+  "version": "1.0.0",
+  "description": "Canteen website with warm food design and Telegram Notifications",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.2",
+    "dotenv": "^16.4.5"
+  }
+}

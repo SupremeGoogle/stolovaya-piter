@@ -1,0 +1,7 @@
+name = "telegram-api-proxy"
+main = "proxy-worker.js"
+compatibility_date = "2026-06-19"
+
+# Конфигурация для быстрого развертывания
+# Запуск для локальной отладки: npx wrangler dev
+# Запуск для публикации: npx wrangler deploy

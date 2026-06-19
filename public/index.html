@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Столовая в Шушарах (Санкт-Петербург, 1-й Бадаевский проезд, 9А). Доставка горячих комплексных обедов в офисы, на строительные объекты и на дом. Маринованный шашлык в вакуумной упаковке. Уютная атмосфера и домашнее качество.">
+  <title>Столовая в Шушарах — Доставка комплексных обедов и шашлыка</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Фон с плавающими теплыми градиентными сферами -->
+  <div class="bg-spheres">
+    <div class="sphere sphere-1"></div>
+    <div class="sphere sphere-2"></div>
+    <div class="sphere sphere-3"></div>
+  </div>
+
+  <!-- Шапка сайта -->
+  <header id="main-header" class="glass">
+    <a href="#" class="logo">
+      <span class="logo-icon">🍽</span>
+      <span>СТОЛОВАЯ</span>
+    </a>
+    
+    <!-- Кнопка бургер-меню -->
+    <button class="burger-menu-btn" id="burger-btn" onclick="toggleMobileMenu()">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <nav id="nav-menu">
+      <ul>
+        <li><a href="#hero" onclick="closeMobileMenu()">Главная</a></li>
+        <li><a href="#catalog" onclick="closeMobileMenu()">Меню</a></li>
+        <li><a href="#gallery" onclick="closeMobileMenu()">Галерея</a></li>
+        <li><a href="#about" onclick="closeMobileMenu()">О нас</a></li>
+        <li><a href="#feedback" onclick="closeMobileMenu()">Контакты</a></li>
+      </ul>
+    </nav>
+    <div class="header-contacts">
+      <a href="#feedback" class="btn-primary btn-header">Заказать доставку</a>
+    </div>
+  </header>
+
+  <!-- Герой-секция -->
+  <section id="hero" class="hero">
+    <div class="hero-info">
+      <div class="hero-tag">
+        <span></span> Столовая в Шушарах
+      </div>
+      <h1 id="hero-title">Загрузка...</h1>
+      <p id="hero-subtitle">Загрузка информации...</p>
+      <div class="hero-actions">
+        <a href="#catalog" class="btn-primary">Смотреть меню ➔</a>
+        <a href="#about" class="btn-secondary">Наш адрес и часы</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Преимущества -->
+  <section id="features" class="features">
+    <div class="section-header">
+      <span class="section-tag">почему мы</span>
+      <h2 class="section-title">Вкусно, сытно и всегда вовремя</h2>
+      <p class="section-subtitle">Мы заботимся о качестве каждого блюда и гарантируем своевременную доставку горячего питания.</p>
+    </div>
+    
+    <div id="features-grid" class="features-grid">
+      <!-- Сюда динамически рендерятся преимущества -->
+    </div>
+  </section>
+
+  <!-- Меню столовой -->
+  <section id="catalog" class="catalog">
+    <div class="section-header">
+      <span class="section-tag">ассортимент</span>
+      <h2 class="section-title">Наше аппетитное меню</h2>
+      <p class="section-subtitle">Свежий шашлык для пикника в вакуумной упаковке и полноценные горячие комплексные обеды с доставкой.</p>
+    </div>
+    
+    <div class="catalog-tabs">
+      <button id="btn-uncategorized" class="tab-btn active" onclick="switchCategory('uncategorized')">Без категории</button>
+      <button id="btn-complex" class="tab-btn" onclick="switchCategory('complex')">Комплексные обеды</button>
+    </div>
+    
+    <!-- Сетка блюд "Без категории" (динамическая) -->
+    <div id="grid-uncategorized" class="catalog-grid"></div>
+    
+    <!-- Сетка блюд "Комплексные обеды" (динамическая) -->
+    <div id="grid-complex" class="catalog-grid" style="display: none;"></div>
+  </section>
+
+  <!-- Интерактивная галерея -->
+  <section id="gallery" class="gallery">
+    <div class="section-header">
+      <span class="section-tag">фотогалерея</span>
+      <h2 class="section-title">Ароматные моменты</h2>
+      <p class="section-subtitle">Реальные кадры наших аппетитных блюд, свежего мяса и процесса доставки.</p>
+    </div>
+    
+    <div class="gallery-carousel">
+      <div id="gallery-track" class="gallery-track">
+        <!-- Сюда динамически рендерятся элементы галереи -->
+      </div>
+    </div>
+  </section>
+
+  <!-- О столовой / Яндекс.Карта -->
+  <section id="about" class="about">
+    <div class="about-container">
+      <div class="about-info">
+        <span class="section-tag">как нас найти</span>
+        <h2 id="about-title">Загрузка...</h2>
+        <p id="about-desc1">...</p>
+        <p id="about-desc2">...</p>
+        
+        <div class="contact-details desktop-contacts">
+          <div class="contact-item">
+            <div class="contact-item-icon">📍</div>
+            <div class="contact-item-text">
+              <h4>Наш адрес</h4>
+              <p id="about-address">...</p>
+            </div>
+          </div>
+          
+          <div class="contact-item">
+            <div class="contact-item-icon">⏰</div>
+            <div class="contact-item-text">
+              <h4>Режим работы</h4>
+              <p id="about-worktime">...</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Стеклянная Яндекс Карта -->
+      <div class="about-map-wrapper glass">
+        <iframe class="about-map" src="https://yandex.ru/map-widget/v1/org/stolovaya/239490569186/?ll=30.526920%2C59.856830&z=15" allowfullscreen="true" style="position:relative;"></iframe>
+      </div>
+
+      <!-- Блок контактов для мобильной версии (будет показан под картой) -->
+      <div class="contact-details mobile-contacts">
+        <div class="contact-item">
+          <div class="contact-item-icon">📍</div>
+          <div class="contact-item-text">
+            <h4>Наш адрес</h4>
+            <p id="about-address-mob">...</p>
+          </div>
+        </div>
+        
+        <div class="contact-item">
+          <div class="contact-item-icon">⏰</div>
+          <div class="contact-item-text">
+            <h4>Режим работы</h4>
+            <p id="about-worktime-mob">...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Обратная связь -->
+  <section id="feedback" class="feedback">
+    <div class="feedback-container glass">
+      <div class="feedback-details">
+        <div>
+          <span class="section-tag">доставка обедов</span>
+          <h2>Остались вопросы или хотите сделать заказ?</h2>
+          <p>Заполните форму обратной связи. Наш администратор свяжется с вами в течение 10 минут, согласует меню, количество порций и точное время доставки.</p>
+        </div>
+      </div>
+      
+      <div class="feedback-form-wrapper">
+        <form id="orderForm" class="feedback-form" onsubmit="sendFeedback(event)">
+          <div class="form-group">
+            <label for="form-name">Ваше имя</label>
+            <input type="text" id="form-name" placeholder="Например, Александр" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="form-phone">Номер телефона</label>
+            <input type="tel" id="form-phone" placeholder="+7 (999) 123-45-67" required>
+          </div>
+          
+          <div class="form-group">
+            <label for="form-msg">Что вы хотите заказать?</label>
+            <textarea id="form-msg" rows="4" placeholder="Например: Шашлык свиная шея — 2 кг, или 15 комплексных обедов на строительный объект..."></textarea>
+          </div>
+          
+          <div id="form-status-msg" class="form-status"></div>
+          
+          <button type="submit" class="btn-primary form-submit-btn">
+            <span>Отправить заявку ➔</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-content">
+      <div class="footer-copy">
+        © 2026 Столовая в Шушарах. Санкт-Петербург, 1-й Бадаевский проезд, 9А. Все права защищены.
+      </div>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>

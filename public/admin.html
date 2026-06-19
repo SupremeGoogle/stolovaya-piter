@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Админ-панель — Столовая Шушары</title>
+  <link rel="icon" type="image/png" href="images/favicon.png">
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Кастомные стили для панели управления */
+    body {
+      background-attachment: fixed;
+      padding: 40px 20px;
+    }
+    
+    .admin-container {
+      max-width: 1200px;
+      margin: 80px auto 0 auto;
+      min-height: 70vh;
+      display: none; /* Скрыто до авторизации */
+    }
+    
+    .login-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 80vh;
+    }
+    
+    .login-card {
+      width: 400px;
+      padding: 40px;
+      text-align: center;
+    }
+    
+    .login-card h2 {
+      margin-bottom: 25px;
+      font-size: 1.8rem;
+    }
+    
+    .login-card input {
+      width: 100%;
+      padding: 15px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.5);
+      margin-bottom: 20px;
+      font-size: 1rem;
+      outline: none;
+      text-align: center;
+    }
+    
+    .login-card input:focus {
+      border-color: #a481c4;
+      background: white;
+    }
+    
+    /* Layout админки */
+    .admin-workspace {
+      display: flex;
+      gap: 30px;
+    }
+    
+    .admin-sidebar {
+      flex: 1;
+      max-width: 280px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      height: fit-content;
+      position: sticky;
+      top: 110px;
+    }
+    
+    .sidebar-btn {
+      padding: 15px 20px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.3);
+      border: 1px solid rgba(255,255,255,0.5);
+      font-family: var(--font-primary);
+      font-weight: 600;
+      color: var(--text-main);
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .sidebar-btn.active, .sidebar-btn:hover {
+      background: white;
+      color: #a481c4;
+      box-shadow: 0 4px 15px rgba(100,110,140,0.05);
+    }
+    
+    .admin-content {
+      flex: 3;
+      padding: 40px;
+      padding-bottom: 120px; /* Отступ для предотвращения перекрытия нижней панелью сохранения */
+    }
+    
+    .admin-section {
+      display: none;
+    }
+    
+    .admin-section.active {
+      display: block;
+    }
+    
+    .admin-section h2 {
+      margin-bottom: 25px;
+      font-size: 1.8rem;
+      border-bottom: 2px solid rgba(255,255,255,0.5);
+      padding-bottom: 10px;
+    }
+    
+    /* Формы */
+    .form-row {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 20px;
+    }
+    
+    .form-row .form-group {
+      flex: 1;
+    }
+    
+    /* Списки товаров и элементов */
+    .item-list-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+    
+    .item-editor-card {
+      padding: 20px;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.25);
+      border: 1px solid rgba(255,255,255,0.4);
+      position: relative;
+    }
+    
+    .btn-delete-item {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: rgba(240, 166, 202, 0.3);
+      border: 1px solid rgba(240, 166, 202, 0.5);
+      color: #8f325d;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-delete-item:hover {
+      background: #f0a6ca;
+      color: white;
+    }
+    
+    .btn-add-item {
+      margin-top: 20px;
+      background: rgba(156, 210, 211, 0.4);
+      border: 1px solid rgba(156, 210, 211, 0.6);
+      color: #2b7071;
+      padding: 12px 24px;
+      border-radius: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-add-item:hover {
+      background: rgba(156, 210, 211, 0.7);
+    }
+    
+    /* Элемент загрузки фото */
+    .image-picker-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      margin-top: 8px;
+    }
+    
+    .image-preview {
+      width: 70px;
+      height: 70px;
+      border-radius: 10px;
+      object-fit: cover;
+      border: 1px solid rgba(255,255,255,0.6);
+      background: #eee;
+    }
+    
+    .btn-upload-file {
+      background: white;
+      border: 1px solid rgba(255,255,255,0.8);
+      padding: 10px 18px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+    
+    .btn-upload-file:hover {
+      background: #f5f5f5;
+    }
+    
+    /* Сохранение */
+    .admin-footer {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90%;
+      max-width: 1200px;
+      padding: 15px 30px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      z-index: 100;
+    }
+    
+    .admin-status-info {
+      font-size: 0.9rem;
+      font-weight: 500;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Фон с плавающими градиентными сферами -->
+  <div class="bg-spheres">
+    <div class="sphere sphere-1"></div>
+    <div class="sphere sphere-2"></div>
+    <div class="sphere sphere-3"></div>
+  </div>
+
+  <!-- Шапка админки -->
+  <header id="main-header" class="glass">
+    <a href="#" class="logo">
+      <span class="logo-icon">⚙️</span>
+      <span>АДМИН-ПАНЕЛЬ</span>
+    </a>
+    <div class="header-contacts">
+      <button onclick="logout()" class="btn-secondary" style="padding: 8px 18px; font-size: 0.85rem;">Выйти</button>
+    </div>
+  </header>
+
+  <!-- Экран Входа -->
+  <div id="login-screen" class="login-container">
+    <div class="login-card glass">
+      <h2>Авторизация</h2>
+      <input type="password" id="admin-pass" placeholder="Пароль администратора">
+      <div id="login-error" style="color: #8f325d; font-size: 0.9rem; margin-bottom: 15px; display: none;">Неверный пароль</div>
+      <button onclick="login()" class="btn-primary" style="width: 100%;">Войти</button>
+    </div>
+  </div>
+
+  <!-- Главное пространство админки -->
+  <div id="admin-screen" class="admin-container">
+    <div class="admin-workspace">
+      
+      <!-- Боковое меню разделов -->
+      <div class="admin-sidebar glass">
+        <button class="sidebar-btn active" onclick="switchSection('sec-general', this)">Общая информация</button>
+        <button class="sidebar-btn" onclick="switchSection('sec-features', this)">Преимущества</button>
+        <button class="sidebar-btn" onclick="switchSection('sec-uncategorized', this)">Без категории</button>
+        <button class="sidebar-btn" onclick="switchSection('sec-complex', this)">Комплексные обеды</button>
+        <button class="sidebar-btn" onclick="switchSection('sec-gallery', this)">Галерея фото</button>
+      </div>
+      
+      <!-- Контент-панель редактора -->
+      <div class="admin-content glass">
+        
+        <!-- Раздел: Общее -->
+        <div id="sec-general" class="admin-section active">
+          <h2>Hero & Контакты</h2>
+          <div class="form-group">
+            <label>Главный заголовок Hero</label>
+            <input type="text" id="gen-hero-title">
+          </div>
+          <div class="form-group">
+            <label>Подзаголовок Hero</label>
+            <textarea id="gen-hero-subtitle" rows="3"></textarea>
+          </div>
+          <div class="form-group">
+            <label>Заголовок секции «О нас»</label>
+            <input type="text" id="gen-about-title">
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Описание 1</label>
+              <textarea id="gen-about-desc1" rows="4"></textarea>
+            </div>
+            <div class="form-group">
+              <label>Описание 2</label>
+              <textarea id="gen-about-desc2" rows="4"></textarea>
+            </div>
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label>Адрес магазина</label>
+              <input type="text" id="gen-about-address">
+            </div>
+            <div class="form-group">
+              <label>Режим работы</label>
+              <input type="text" id="gen-about-worktime">
+            </div>
+          </div>
+        </div>
+        
+        <!-- Раздел: Преимущества -->
+        <div id="sec-features" class="admin-section">
+          <h2>Карточки преимуществ</h2>
+          <div id="features-list" class="item-list-container">
+            <!-- 3 карточки преимуществ будут сгенерированы здесь -->
+          </div>
+        </div>
+        
+        <!-- Раздел: Без категории -->
+        <div id="sec-uncategorized" class="admin-section">
+          <h2>Без категории</h2>
+          <div id="uncategorized-list" class="item-list-container"></div>
+          <button class="btn-add-item" onclick="addNewProduct('uncategorized')">✚ Добавить товар «Без категории»</button>
+        </div>
+        
+        <!-- Раздел: Комплексные обеды -->
+        <div id="sec-complex" class="admin-section">
+          <h2>Комплексные обеды</h2>
+          <div id="complex-list" class="item-list-container"></div>
+          <button class="btn-add-item" onclick="addNewProduct('complex')">✚ Добавить комплексный обед</button>
+        </div>
+        
+        <!-- Раздел: Галерея фото -->
+        <div id="sec-gallery" class="admin-section">
+          <h2>Галерея фотографий</h2>
+          <div id="gallery-list" class="item-list-container"></div>
+          <button class="btn-add-item" onclick="addNewGalleryItem()">✚ Добавить фото в галерею</button>
+        </div>
+        
+      </div>
+    </div>
+  </div>
+
+  <!-- Плавающая панель сохранения -->
+  <div id="admin-save-bar" class="admin-save-bar glass admin-footer" style="display: none;">
+    <div class="admin-status-info">
+      Пароль введен • Готов к сохранению
+    </div>
+    <button onclick="saveAll()" class="btn-primary" id="btn-save-all">Сохранить изменения</button>
+  </div>
+
+  <script>
+    let localData = null;
+    let imagesQueue = []; // Хранилище base64 картинок для отправки
+    let currentPassword = '';
+
+    // Инициализация при загрузке страницы
+    window.addEventListener('DOMContentLoaded', () => {
+      // Проверяем сохраненный пароль в sessionStorage
+      const savedPass = sessionStorage.getItem('admin_password');
+      if (savedPass) {
+        document.getElementById('admin-pass').value = savedPass;
+        login();
+      }
+    });
+
+    // Функция входа
+    async function login() {
+      const pass = document.getElementById('admin-pass').value;
+      const errorDiv = document.getElementById('login-error');
+      
+      if (!pass) return;
+      
+      try {
+        // Загружаем данные
+        const res = await fetch(`/data.json?t=${Date.now()}`);
+        if (!res.ok) throw new Error();
+        localData = await res.json();
+        
+        // Авторизация прошла успешно (пароль проверим при сохранении, локально просто пускаем)
+        currentPassword = pass;
+        sessionStorage.setItem('admin_password', pass);
+        
+        document.getElementById('login-screen').style.display = 'none';
+        document.getElementById('admin-screen').style.display = 'block';
+        document.getElementById('admin-save-bar').style.display = 'flex';
+        
+        // Рендерим данные в форму
+        populateForm(localData);
+      } catch (err) {
+        errorDiv.style.display = 'block';
+      }
+    }
+
+    function logout() {
+      sessionStorage.removeItem('admin_password');
+      location.reload();
+    }
+
+    // Переключение разделов меню
+    function switchSection(secId, btn) {
+      document.querySelectorAll('.admin-section').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.sidebar-btn').forEach(b => b.classList.remove('active'));
+      
+      document.getElementById(secId).classList.add('active');
+      btn.classList.add('active');
+    }
+
+    // Заполнение формы данными
+    function populateForm(data) {
+      const rawTitle = data.hero?.title || '';
+      document.getElementById('gen-hero-title').value = rawTitle.replace(/<span>(.*?)<\/span>/gi, '*$1*');
+      document.getElementById('gen-hero-subtitle').value = data.hero?.subtitle || '';
+      document.getElementById('gen-about-title').value = data.about?.title || '';
+      document.getElementById('gen-about-desc1').value = data.about?.description1 || '';
+      document.getElementById('gen-about-desc2').value = data.about?.description2 || '';
+      document.getElementById('gen-about-address').value = data.about?.address || '';
+      document.getElementById('gen-about-worktime').value = data.about?.workTime || '';
+
+      // Преимущества
+      const featuresList = document.getElementById('features-list');
+      featuresList.innerHTML = '';
+      (data.features || []).forEach((feat, index) => {
+        featuresList.innerHTML += `
+          <div class="item-editor-card" data-index="${index}">
+            <div class="form-row">
+              <div class="form-group" style="max-width: 80px;">
+                <label>Иконка</label>
+                <input type="text" class="feat-icon" value="${feat.icon}" style="text-align: center;">
+              </div>
+              <div class="form-group">
+                <label>Заголовок преимущества</label>
+                <input type="text" class="feat-title" value="${feat.title}">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Описание</label>
+              <textarea class="feat-desc" rows="2">${feat.description}</textarea>
+            </div>
+          </div>
+        `;
+      });
+
+      // Без категории
+      renderProductList('uncategorized', data.catalog?.uncategorized || []);
+      // Комплексные обеды
+      renderProductList('complex', data.catalog?.complex || []);
+      // Галерея
+      renderGalleryList(data.gallery || []);
+    }
+
+    // Рендер каталога
+    function renderProductList(category, items) {
+      const container = document.getElementById(`${category}-list`);
+      container.innerHTML = '';
+      
+      items.forEach((item, index) => {
+        const uniqueId = `${category}-${index}`;
+        container.innerHTML += `
+          <div class="item-editor-card product-item" data-category="${category}" data-index="${index}">
+            <button class="btn-delete-item" onclick="deleteProduct('${category}', ${index})">✕</button>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Название товара</label>
+                <input type="text" class="prod-name" value="${item.name}">
+              </div>
+              <div class="form-group" style="max-width: 180px;">
+                <label>Цена</label>
+                <input type="text" class="prod-price" value="${item.price}">
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Описание</label>
+              <textarea class="prod-desc" rows="2">${item.description}</textarea>
+            </div>
+            
+            <div class="form-row" style="align-items: flex-end;">
+              <div class="form-group">
+                <label>Путь к фото / Ссылка</label>
+                <input type="text" class="prod-img" id="img-path-${uniqueId}" value="${item.image}">
+              </div>
+              <div class="form-group" style="max-width: 250px;">
+                <div class="image-picker-wrapper">
+                  <img src="${item.image}" class="image-preview" id="img-prev-${uniqueId}" onerror="this.src='images/shashlik_pork.jpg'">
+                  <button class="btn-upload-file" onclick="triggerImageUpload('${uniqueId}')">Загрузить с устройства</button>
+                  <input type="file" id="file-input-${uniqueId}" style="display:none;" accept="image/*" onchange="handleImageFile(this, '${uniqueId}')">
+                </div>
+              </div>
+            </div>
+            
+            <div class="form-row" style="margin-top: 10px;">
+              <div class="form-group" style="flex-direction: row; gap: 10px; align-items: center;">
+                <input type="checkbox" class="prod-popular" id="pop-${uniqueId}" ${item.popular ? 'checked' : ''} style="width: auto; margin-bottom: 0;">
+                <label for="pop-${uniqueId}">Популярный товар</label>
+              </div>
+              <div class="form-group" style="flex-direction: row; gap: 10px; align-items: center;">
+                <input type="checkbox" class="prod-hit" id="hit-${uniqueId}" ${item.hit ? 'checked' : ''} style="width: auto; margin-bottom: 0;">
+                <label for="hit-${uniqueId}">Хит сезона</label>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Рендер галереи
+    function renderGalleryList(items) {
+      const container = document.getElementById('gallery-list');
+      container.innerHTML = '';
+      
+      items.forEach((item, index) => {
+        const uniqueId = `gallery-${index}`;
+        container.innerHTML += `
+          <div class="item-editor-card gallery-item" data-index="${index}">
+            <button class="btn-delete-item" onclick="deleteGalleryItem(${index})">✕</button>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Заголовок слайда</label>
+                <input type="text" class="gal-title" value="${item.title}">
+              </div>
+              <div class="form-group">
+                <label>Подзаголовок слайда</label>
+                <input type="text" class="gal-subtitle" value="${item.subtitle}">
+              </div>
+            </div>
+            <div class="form-row" style="align-items: flex-end;">
+              <div class="form-group">
+                <label>Путь к фото / Ссылка</label>
+                <input type="text" class="gal-img" id="img-path-${uniqueId}" value="${item.image}">
+              </div>
+              <div class="form-group" style="max-width: 250px;">
+                <div class="image-picker-wrapper">
+                  <img src="${item.image}" class="image-preview" id="img-prev-${uniqueId}" onerror="this.src='images/shashlik_pork.jpg'">
+                  <button class="btn-upload-file" onclick="triggerImageUpload('${uniqueId}')">Загрузить с устройства</button>
+                  <input type="file" id="file-input-${uniqueId}" style="display:none;" accept="image/*" onchange="handleImageFile(this, '${uniqueId}')">
+                </div>
+              </div>
+            </div>
+          </div>
+        `;
+      });
+    }
+
+    // Активация выбора файла
+    function triggerImageUpload(id) {
+      document.getElementById(`file-input-${id}`).click();
+    }
+
+    // Обработка загрузки файла с ПК
+    function handleImageFile(input, uniqueId) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64 = e.target.result;
+        
+        // Генерируем уникальное имя файла
+        const ext = file.name.split('.').pop();
+        const cleanName = `upload_${Date.now()}_${Math.floor(Math.random() * 1000)}.${ext}`;
+        
+        // Показываем превью
+        document.getElementById(`img-prev-${uniqueId}`).src = base64;
+        
+        // Меняем путь в текстовом поле на новый путь
+        const pathInput = document.getElementById(`img-path-${uniqueId}`);
+        pathInput.value = `images/${cleanName}`;
+        
+        // Кладем в очередь отправки картинок на сервер
+        // Если для этого элемента уже была картинка в очереди, удаляем ее
+        imagesQueue = imagesQueue.filter(img => img.id !== uniqueId);
+        imagesQueue.push({
+          id: uniqueId,
+          name: cleanName,
+          base64: base64
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // Добавление товаров
+    function addNewProduct(category) {
+      const list = localData.catalog[category];
+      list.push({
+        id: `${category}-${Date.now()}`,
+        name: 'Новое блюдо',
+        description: 'Описание блюда...',
+        price: '350 ₽',
+        image: 'images/shashlik_pork.jpg',
+        popular: false,
+        hit: false
+      });
+      renderProductList(category, list);
+    }
+
+    // Удаление товара
+    function deleteProduct(category, index) {
+      if (confirm('Вы уверены, что хотите удалить этот товар?')) {
+        localData.catalog[category].splice(index, 1);
+        renderProductList(category, localData.catalog[category]);
+      }
+    }
+
+    // Добавление слайда
+    function addNewGalleryItem() {
+      localData.gallery.push({
+        image: 'images/shashlik_pork.jpg',
+        title: 'Новый слайд',
+        subtitle: 'Описание слайда'
+      });
+      renderGalleryList(localData.gallery);
+    }
+
+    // Удаление слайда
+    function deleteGalleryItem(index) {
+      if (confirm('Удалить этот слайд из галереи?')) {
+        localData.gallery.splice(index, 1);
+        renderGalleryList(localData.gallery);
+      }
+    }
+
+    // Сохранение ВСЕГО
+    async function saveAll() {
+      const btn = document.getElementById('btn-save-all');
+      btn.disabled = true;
+      btn.textContent = 'Сохранение...';
+
+      const displayTitle = document.getElementById('gen-hero-title').value;
+      localData.hero.title = displayTitle.replace(/\*(.*?)\*/g, '<span>$1</span>');
+      localData.hero.subtitle = document.getElementById('gen-hero-subtitle').value;
+      localData.about.title = document.getElementById('gen-about-title').value;
+      localData.about.description1 = document.getElementById('gen-about-desc1').value;
+      localData.about.description2 = document.getElementById('gen-about-desc2').value;
+      localData.about.address = document.getElementById('gen-about-address').value;
+      localData.about.workTime = document.getElementById('gen-about-worktime').value;
+
+      // 2. Собираем преимущества
+      const featuresCards = document.querySelectorAll('#features-list .item-editor-card');
+      localData.features = Array.from(featuresCards).map(card => ({
+        icon: card.querySelector('.feat-icon').value,
+        title: card.querySelector('.feat-title').value,
+        description: card.querySelector('.feat-desc').value
+      }));
+
+      // 3. Собираем Без категории
+      const uncategorizedCards = document.querySelectorAll('#uncategorized-list .product-item');
+      localData.catalog.uncategorized = Array.from(uncategorizedCards).map(card => ({
+        id: `uncat-${Date.now()}-${Math.random()}`,
+        name: card.querySelector('.prod-name').value,
+        price: card.querySelector('.prod-price').value,
+        description: card.querySelector('.prod-desc').value,
+        image: card.querySelector('.prod-img').value,
+        popular: card.querySelector('.prod-popular').checked,
+        hit: card.querySelector('.prod-hit').checked
+      }));
+
+      // 4. Собираем Комплексные обеды
+      const complexCards = document.querySelectorAll('#complex-list .product-item');
+      localData.catalog.complex = Array.from(complexCards).map(card => ({
+        id: `complex-${Date.now()}-${Math.random()}`,
+        name: card.querySelector('.prod-name').value,
+        price: card.querySelector('.prod-price').value,
+        description: card.querySelector('.prod-desc').value,
+        image: card.querySelector('.prod-img').value,
+        popular: card.querySelector('.prod-popular').checked,
+        hit: card.querySelector('.prod-hit').checked
+      }));
+
+      // 5. Собираем галерею
+      const galleryCards = document.querySelectorAll('#gallery-list .gallery-item');
+      localData.gallery = Array.from(galleryCards).map(card => ({
+        image: card.querySelector('.gal-img').value,
+        title: card.querySelector('.gal-title').value,
+        subtitle: card.querySelector('.gal-subtitle').value
+      }));
+
+      // 6. Формируем картинки для отправки
+      // Отправляем только те картинки, пути которых реально остались в сохраненном JSON
+      const activePaths = [
+        ...localData.catalog.uncategorized.map(p => p.image),
+        ...localData.catalog.complex.map(p => p.image),
+        ...localData.gallery.map(g => g.image)
+      ];
+      
+      const imagesToUpload = imagesQueue.filter(img => {
+        const pathVal = document.getElementById(`img-path-${img.id}`).value;
+        return activePaths.includes(pathVal);
+      }).map(img => ({
+        name: img.name,
+        base64: img.base64
+      }));
+
+      // Отправляем запрос на сохранение
+      try {
+        const response = await fetch('/api/save-content', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            password: currentPassword,
+            data: localData,
+            images: imagesToUpload
+          })
+        });
+
+        const resData = await response.json();
+        
+        if (response.ok && resData.success) {
+          alert('✨ Все изменения успешно сохранены!\nНовый дизайн сайта вступит в силу через 30–60 секунд (идёт автоматическая сборка на Vercel).');
+          imagesQueue = []; // очищаем очередь картинок
+        } else {
+          const errorMsg = resData.error || 'Неизвестная ошибка';
+          const detailsMsg = resData.details ? `\nДетали: ${resData.details}` : '';
+          alert(`Ошибка сохранения: ${errorMsg}${detailsMsg}`);
+        }
+      } catch (err) {
+        alert('Сервер недоступен. Ошибка при отправке изменений.');
+      } finally {
+        btn.disabled = false;
+        btn.textContent = 'Сохранить изменения';
+      }
+    }
+  </script>
+</body>
+</html>
