@@ -2,7 +2,29 @@
 window.addEventListener('DOMContentLoaded', () => {
   loadAndRenderContent();
   setupHeaderScroll();
+  setupAnimationFix();
 });
+
+// Фикс: перезапуск анимации карусели при возврате на вкладку
+// Некоторые браузеры останавливают CSS animation в фоновых вкладках
+function setupAnimationFix() {
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      restartAnimation('gallery-track');
+      restartAnimation('reviews-track');
+    }
+  });
+}
+
+function restartAnimation(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.style.animation = 'none';
+  // Принудительный reflow
+  void el.offsetWidth;
+  el.style.animation = '';
+}
+
 
 // Загрузка динамического контента с сервера/диска
 async function loadAndRenderContent() {
@@ -49,8 +71,6 @@ function renderContent(data) {
         <div class="product-card glass glass-card">
           <div class="product-img-wrapper">
             <img src="${item.image}" alt="${item.name}" onerror="this.src='images/shashlik_pork.jpg'">
-            ${item.popular ? '<span class="product-tag">Популярно</span>' : ''}
-            ${item.hit ? '<span class="product-tag">Хит</span>' : ''}
           </div>
           <div class="product-info">
             <h3>${item.name}</h3>
@@ -71,8 +91,6 @@ function renderContent(data) {
         <div class="product-card glass glass-card">
           <div class="product-img-wrapper">
             <img src="${item.image}" alt="${item.name}" onerror="this.src='images/shashlik_pork.jpg'">
-            ${item.popular ? '<span class="product-tag">Популярно</span>' : ''}
-            ${item.hit ? '<span class="product-tag">Хит</span>' : ''}
           </div>
           <div class="product-info">
             <h3>${item.name}</h3>
