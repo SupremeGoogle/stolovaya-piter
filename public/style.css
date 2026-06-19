@@ -266,20 +266,53 @@ nav a:hover::after {
 
 /* --- Герой-секция --- */
 .hero {
-  padding: 160px 20px 80px 20px;
-  min-height: 80vh;
+  position: relative;
+  min-height: 100vh;
   display: flex;
   align-items: center;
-  max-width: 1200px;
-  margin: 0 auto;
+  overflow: hidden;
+}
+
+.hero-bg-image {
+  position: absolute;
+  inset: 0;
+  background-image: url('images/hero_bg.jpg');
+  background-size: cover;
+  background-position: center 40%;
+  background-repeat: no-repeat;
+  transform: scale(1.04);
+  animation: heroZoom 18s ease-in-out infinite alternate;
+  z-index: 0;
+}
+
+@keyframes heroZoom {
+  0%   { transform: scale(1.04) translateY(0); }
+  100% { transform: scale(1.10) translateY(-1.5%); }
+}
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(to bottom,
+      rgba(20, 14, 10, 0.30) 0%,
+      rgba(30, 20, 12, 0.52) 50%,
+      rgba(20, 12, 6,  0.75) 100%),
+    linear-gradient(120deg,
+      rgba(224, 90, 54, 0.18) 0%,
+      rgba(242, 168, 59, 0.10) 100%);
+  z-index: 1;
 }
 
 .hero-container {
-  display: grid;
-  grid-template-columns: 1.2fr 1fr;
-  gap: 40px;
-  align-items: center;
+  position: relative;
+  z-index: 2;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 160px 40px 100px 40px;
   width: 100%;
+  display: flex;
+  align-items: center;
 }
 
 .hero-info {
@@ -287,11 +320,13 @@ nav a:hover::after {
   flex-direction: column;
   align-items: flex-start;
   text-align: left;
+  max-width: 680px;
 }
 
 .hero-tag {
-  background: var(--accent-cream);
-  color: var(--accent-terracotta);
+  background: rgba(255, 245, 235, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
   padding: 8px 16px;
   border-radius: 20px;
   font-size: 0.85rem;
@@ -299,7 +334,7 @@ nav a:hover::after {
   letter-spacing: 1px;
   text-transform: uppercase;
   margin-bottom: 25px;
-  border: 1px solid rgba(224, 90, 54, 0.15);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   gap: 8px;
@@ -309,31 +344,40 @@ nav a:hover::after {
   display: inline-block;
   width: 8px;
   height: 8px;
-  background: var(--accent-terracotta);
+  background: var(--accent-amber);
   border-radius: 50%;
-  box-shadow: 0 0 8px var(--accent-terracotta);
+  box-shadow: 0 0 10px var(--accent-amber);
+  animation: pulseDot 2s ease-in-out infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.4); opacity: 0.7; }
 }
 
 .hero h1 {
-  font-size: 3.2rem;
+  font-size: 3.8rem;
   font-family: var(--font-serif);
   font-weight: 800;
-  line-height: 1.15;
-  margin-bottom: 20px;
-  color: var(--accent-brown);
+  line-height: 1.12;
+  margin-bottom: 22px;
+  color: #fff;
+  text-shadow: 0 2px 20px rgba(0,0,0,0.4);
 }
 
 .hero h1 span {
-  background: linear-gradient(120deg, var(--accent-terracotta), var(--accent-amber));
+  background: linear-gradient(120deg, #f2c97a, var(--accent-amber));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .hero p {
-  font-size: 1.15rem;
-  color: var(--text-muted);
-  max-width: 650px;
-  margin-bottom: 35px;
+  font-size: 1.18rem;
+  color: rgba(255,255,255,0.82);
+  max-width: 560px;
+  margin-bottom: 38px;
+  line-height: 1.65;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
 }
 
 .hero-actions {
@@ -341,27 +385,18 @@ nav a:hover::after {
   gap: 15px;
 }
 
-.hero-image-card {
-  border-radius: 28px;
-  overflow: hidden;
-  padding: 12px;
-  box-shadow: var(--glass-shadow);
-  display: flex;
-  transition: all 0.4s ease;
+/* Ghost button variant for dark hero background */
+.btn-secondary-light {
+  background: rgba(255, 255, 255, 0.15);
+  border: 1.5px solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+  backdrop-filter: blur(8px);
 }
 
-.hero-image-card:hover {
-  transform: translateY(-5px) scale(1.01);
-  box-shadow: var(--glass-shadow-hover);
-  border-color: rgba(224, 90, 54, 0.25);
-}
-
-.hero-image {
-  width: 100%;
-  height: auto;
-  border-radius: 20px;
-  object-fit: cover;
-  aspect-ratio: 1.1 / 1;
+.btn-secondary-light:hover {
+  background: rgba(255, 255, 255, 0.28);
+  border-color: #fff;
+  color: #fff;
 }
 
 .header-phone {
@@ -1044,28 +1079,23 @@ footer {
   }
 
   .hero-container {
-    grid-template-columns: 1fr;
-    gap: 30px;
-    text-align: center;
+    padding: 140px 24px 80px 24px;
+    justify-content: center;
   }
 
   .hero-info {
     align-items: center;
     text-align: center;
-  }
-
-  .hero-image-card {
-    order: -1;
-    margin: 0 auto;
-    max-width: 320px;
+    max-width: 100%;
   }
 
   .hero h1 {
-    font-size: 2.3rem;
+    font-size: 2.4rem;
   }
 
   .hero p {
-    font-size: 0.95rem;
+    font-size: 0.98rem;
+    max-width: 95%;
   }
 
   .hero-actions {
@@ -1078,16 +1108,16 @@ footer {
   .mobile-phone-item {
     display: block;
     margin-top: 15px;
-    border-top: 1px solid rgba(224, 90, 54, 0.08);
+    border-top: 1px solid rgba(255,255,255,0.15);
     padding-top: 15px;
   }
 
   .mobile-phone-link {
-    color: var(--accent-terracotta) !important;
+    color: var(--accent-amber) !important;
     font-weight: 700 !important;
   }
 
-  .btn-primary, .btn-secondary {
+  .btn-primary, .btn-secondary, .btn-secondary-light {
     width: 100%;
   }
 
