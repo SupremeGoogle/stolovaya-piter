@@ -647,6 +647,10 @@ nav a:hover::after {
   animation: scrollGallery 45s linear infinite;
 }
 
+.gallery-track:hover {
+  animation-play-state: paused;
+}
+
 @keyframes scrollGallery {
   0% { transform: translateX(-50%); }
   100% { transform: translateX(0); }
@@ -958,6 +962,10 @@ footer {
   animation: scrollReviews 55s linear infinite;
 }
 
+.reviews-track:hover {
+  animation-play-state: paused;
+}
+
 .review-card {
   width: 380px;
   flex-shrink: 0;
@@ -1121,7 +1129,37 @@ footer {
     width: 100%;
   }
 
-  /* Двухколоночный каталог на мобильных по запросу */
+  /* Блок «Почему мы» — уменьшаем вертикальные отступы */
+  .features {
+    padding: 44px 16px;
+  }
+
+  .features .section-header {
+    margin-bottom: 28px;
+  }
+
+  .features .section-title {
+    font-size: 1.6rem;
+  }
+
+  .feature-card {
+    padding: 22px 18px;
+  }
+
+  /* Блок «Ассортимент» */
+  .catalog {
+    padding: 44px 16px;
+  }
+
+  .catalog .section-title {
+    font-size: 1.5rem;
+  }
+
+  .catalog .section-subtitle {
+    font-size: 0.88rem;
+  }
+
+  /* Двухколоночный каталог на мобильных */
   .catalog-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 15px;
@@ -1161,6 +1199,10 @@ footer {
   }
 
   /* Скролл галереи пальцем без карусели на мобилке */
+  .gallery {
+    padding: 44px 0;
+  }
+
   .gallery-carousel {
     overflow-x: auto;
     cursor: grab;
@@ -1187,6 +1229,19 @@ footer {
     transform: translateY(0);
   }
 
+  /* Блок «Отзывы» — уменьшаем */
+  .reviews {
+    padding: 44px 16px;
+  }
+
+  .reviews .section-header {
+    margin-bottom: 28px;
+  }
+
+  .reviews .section-title {
+    font-size: 1.6rem;
+  }
+
   /* Скролл отзывов пальцем без карусели на мобилке */
   .reviews-carousel {
     overflow-x: auto;
@@ -1204,8 +1259,31 @@ footer {
   }
 
   .review-card {
-    width: 290px;
+    width: 270px;
     flex-shrink: 0;
+    padding: 20px;
+  }
+
+  .review-text {
+    font-size: 0.88rem;
+  }
+
+  /* Блок Обратная связь — уменьшаем */
+  .feedback {
+    padding: 44px 16px 60px 16px;
+  }
+
+  .feedback-container {
+    padding: 28px 20px;
+    gap: 20px;
+  }
+
+  .feedback-details h2 {
+    font-size: 1.5rem;
+  }
+
+  .feedback-details p {
+    font-size: 0.88rem;
   }
 
   /* Контакты под картой на мобильной версии */

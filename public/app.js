@@ -127,8 +127,6 @@ function renderContent(data) {
   // 5. Галерея
   if (data.gallery) {
     const track = document.getElementById('gallery-track');
-    
-    // Генерируем элементы
     const slidesHtml = (data.gallery || []).map(item => `
       <div class="gallery-item">
         <img src="${item.image}" alt="${item.title}" onerror="this.src='images/shashlik_pork.jpg'">
@@ -138,9 +136,13 @@ function renderContent(data) {
         </div>
       </div>
     `).join('');
-    
-    // Дублируем слайды, чтобы скролл шел бесконечно и плавно
+    // Дублируем слайды для бесконечного скролла
     track.innerHTML = slidesHtml + slidesHtml;
+    // Принудительный reflow и перезапуск анимации (фикс пропадания)
+    void track.offsetWidth;
+    track.style.animation = 'none';
+    void track.offsetWidth;
+    track.style.animation = '';
   }
 
   // 6. Отзывы
@@ -161,6 +163,11 @@ function renderContent(data) {
       `).join('');
       // Дублируем отзывы для бесконечной карусели
       reviewsTrack.innerHTML = reviewsHtml + reviewsHtml;
+      // Принудительный reflow и перезапуск анимации (фикс пропадания)
+      void reviewsTrack.offsetWidth;
+      reviewsTrack.style.animation = 'none';
+      void reviewsTrack.offsetWidth;
+      reviewsTrack.style.animation = '';
     }
   }
 }
