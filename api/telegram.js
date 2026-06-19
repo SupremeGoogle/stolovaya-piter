@@ -45,7 +45,7 @@ export default async function handler(req, res) {
   };
 
   try {
-    if (text === '/stolovaya062026') {
+    if (text === '/stolovaya062026' || text === '/sotolovaya062026') {
       const { content } = await getFile('admins.json');
       const admins = JSON.parse(content || '[]');
       
